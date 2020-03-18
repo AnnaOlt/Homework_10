@@ -34,7 +34,7 @@ async function promptUser() {
       message: "What is your email?"
     }
   ]);
-  //.then(answers => {
+
   console.info("Answers:", JSON.stringify(answers));
   switch (answers.role) {
     case "Engineer":
@@ -47,7 +47,6 @@ async function promptUser() {
     default:
       return null;
   }
-  //});
 }
 
 function displayEngineer(origAnswers) {
@@ -57,6 +56,11 @@ function displayEngineer(origAnswers) {
         type: "input",
         name: "github",
         message: "What is your github username?"
+      },
+      {
+        type: "confirm",
+        name: "moreEmployees",
+        message: "Would you like to add more employees?"
       }
     ])
     .then(newAnswers => {
@@ -72,7 +76,11 @@ function displayEngineer(origAnswers) {
         "Pushing engineer into array: " + JSON.stringify(newEngineer)
       );
       employees.push(newEngineer);
-      createMainHTML();
+      if (newAnswers.moreEmployees) {
+        promptUser();
+      } else {
+        createMainHTML();
+      }
     });
 }
 
@@ -83,6 +91,11 @@ function displayIntern(origAnswers) {
         type: "input",
         name: "school",
         message: "What school do you attend?"
+      },
+      {
+        type: "confirm",
+        name: "moreEmployees",
+        message: "Would you like to add more employees?"
       }
     ])
     .then(newAnswers => {
@@ -96,26 +109,29 @@ function displayIntern(origAnswers) {
       );
       console.log("Pushing intern into array: " + JSON.stringify(newIntern));
       employees.push(newIntern);
-      createMainHTML();
+      if (newAnswers.moreEmployees) {
+        promptUser();
+      } else {
+        createMainHTML();
+      }
     });
 }
 
 function displayManger(origAnswers) {
-  console.log(" ");
-  console.log(" ");
-  console.log("displayManager is being called");
-  console.log(" ");
-  console.log(" ");
   inquirer
     .prompt([
       {
         type: "input",
         name: "officeNumber",
         message: "What is your office number?"
+      },
+      {
+        type: "confirm",
+        name: "moreEmployees",
+        message: "Would you like to add more employees?"
       }
     ])
     .then(newAnswers => {
-      console.log("================================");
       console.info("newAnswers:", JSON.stringify(newAnswers));
 
       let newManager = new Manager(
@@ -126,14 +142,18 @@ function displayManger(origAnswers) {
       );
       console.log("Pushing manager into array: " + JSON.stringify(newManager));
       employees.push(newManager);
-      createMainHTML();
+      if (newAnswers.moreEmployees) {
+        promptUser();
+      } else {
+        createMainHTML();
+      }
       //render.render(employees);
     });
 }
 
 function createMainHTML() {
   try {
-    fs.appendFile(outputPath, render.render(employees), (err, data) => {
+    fs.writeFile(outputPath, render.render(employees), (err, data) => {
       if (err) throw err;
       console.log("File Created in output folder");
     });
@@ -144,7 +164,6 @@ function createMainHTML() {
 
 async function execute() {
   await promptUser();
-  console.log("DONE with prompUser()");
 }
 
 execute();
