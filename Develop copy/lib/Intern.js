@@ -3,7 +3,8 @@ const Employee = require("./Employee");
 
 class Intern extends Employee {
   constructor(name, id, email, school) {
-    super(name);
+    super(name, id, email);
+    this.role = "Intern";
     this.school = school;
   }
 
@@ -11,7 +12,7 @@ class Intern extends Employee {
     return this.school;
   }
   getRole() {
-    return "Intern";
+    return this.role;
   }
 }
 

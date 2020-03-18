@@ -6,10 +6,10 @@ class Employee {
   //   this.title = "Employee";
   //   this.email = email;
   // }
-  constructor(name, id = 1, email = "test@gmail.com", title = "Employee") {
+  constructor(name, id = 1, email = "test@gmail.com", role = "Employee") {
     this.name = name;
     this.id = id;
-    this.title = title;
+    this.role = role;
     this.email = email;
   }
   getName() {
@@ -22,7 +22,7 @@ class Employee {
     return this.email;
   }
   getRole() {
-    return "Employee";
+    return this.role;
   }
 }
 
